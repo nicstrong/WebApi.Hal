@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Buffers;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
-using WebApi.Hal.JsonConverters;
 
 namespace WebApi.Hal
 {
@@ -12,44 +10,32 @@ namespace WebApi.Hal
     {
         private const string _mediaTypeHeaderValueName = "application/hal+json";
 
-        private readonly LinksConverter _linksConverter = new LinksConverter();
-
-        private readonly ResourceConverter _resourceConverter;
-        private readonly EmbeddedResourceConverter _embeddedResourceConverter = new EmbeddedResourceConverter();
-
-        public JsonHalMediaTypeOutputFormatter(
-            JsonSerializerSettings serializerSettings, 
-            ArrayPool<char> charPool, 
-            IHypermediaResolver hypermediaResolver) : 
-            base(serializerSettings, charPool)
-        {
-            if (hypermediaResolver == null)
-            {
-                throw new ArgumentNullException(nameof(hypermediaResolver));
-            }
-
-            _resourceConverter = new ResourceConverter(hypermediaResolver);
-            Initialize();
-        }
-
-        public JsonHalMediaTypeOutputFormatter(
+       public JsonHalMediaTypeOutputFormatter(
             JsonSerializerSettings serializerSettings, 
             ArrayPool<char> charPool) :
             base(serializerSettings, charPool)
         {
-            _resourceConverter = new ResourceConverter();
             Initialize();
         }
 
         private void Initialize()
         {
+            SupportedMediaTypes.Clear();
             SupportedMediaTypes.Add(new MediaTypeHeaderValue(_mediaTypeHeaderValueName));
-            SerializerSettings.Converters.Add(_linksConverter);
-            SerializerSettings.Converters.Add(_resourceConverter);
-            SerializerSettings.Converters.Add(_embeddedResourceConverter);
-            SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
         }
-        
+
+        protected override JsonSerializer CreateJsonSerializer()
+        {
+            var serializer = base.CreateJsonSerializer();
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            // Can't be Error or the work around used in ResourceConverter.WriteJson() to remove itself from the
+            // list of converters and re-call Serialize will fail as JSON.net will already have marked the object
+            // as serialized
+            serializer.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+
+            return serializer;
+        }
+
         protected override bool CanWriteType(Type type)
         {
             return typeof(Representation).IsAssignableFrom(type);
