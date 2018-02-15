@@ -3,6 +3,7 @@
   <Import Project=".\..\WebApi.Hal.Build\WebApi.Hal.Commons.props" />
   
   <PropertyGroup>
+	<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
