@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WebApi.Hal.Web.Api.Resources;
 using WebApi.Hal.Web.Data;
 
@@ -10,12 +13,13 @@ namespace WebApi.Hal.Web.Api
     {
         readonly IBeerDbContext beerDbContext;
 
-        public BeerController(IBeerDbContext beerDbContext)
+        public BeerController(IBeerDbContext beerDbContext, JsonOutputFormatter outputFormatter)
         {
             this.beerDbContext = beerDbContext;
         }
 
         // GET beers/5
+        [HttpGet("beers/{id:int}")]
         public BeerRepresentation Get(int id)
         {
             var beer = beerDbContext.Beers.Include("Brewery").Include("Style").Single(br => br.Id == id); // lazy loading isn't on for this query; force loading

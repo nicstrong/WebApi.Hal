@@ -15,7 +15,8 @@ namespace WebApi.Hal.Web.Api
             this.repository = repository;
         }
 
-        public BeerListRepresentation Get(int id, int page = 1)
+        [Route("styles/{id}/beers")]
+        public BeerListRepresentation Get(int id, [FromQuery]int page = 1)
         {
             var beers = repository.Find(new GetBeersQuery(b => b.Style.Id == id), page, BeersController.PageSize);
             var resourceList = new BeerListRepresentation(

@@ -5,6 +5,7 @@ using WebApi.Hal.Web.Data;
 
 namespace WebApi.Hal.Web.Api
 {
+    [Route("breweries")]
     public class BreweriesController : Controller
     {
         readonly IBeerDbContext beerDbContext;
@@ -28,6 +29,7 @@ namespace WebApi.Hal.Web.Api
             return new BreweryListRepresentation(breweries);
         }
 
+        [Route("{id:int}")]
         public BreweryRepresentation Get(int id)
         {
             var brewery = beerDbContext.Breweries.Find(id);

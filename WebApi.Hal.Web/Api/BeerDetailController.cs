@@ -17,6 +17,7 @@ namespace WebApi.Hal.Web.Api
         }
 
         // GET beerdetail/5
+        [HttpGet("beerdetail/{id}")]
         public BeerDetailRepresentation Get(int id)
         {
             var beer = beerDbContext.Beers.Include("Brewery").Include("Style").Single(br => br.Id == id); // lazy loading isn't on for this query; force loading
@@ -49,6 +50,8 @@ namespace WebApi.Hal.Web.Api
         }
 
         // PUT beerdetail/5
+        [HttpPut("beerdetail/{id}")]
+
         public void Put(int id, BeerDetailRepresentation beer)
         {
             // this is here just to see how the deserializer is working

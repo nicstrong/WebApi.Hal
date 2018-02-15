@@ -5,6 +5,7 @@ using WebApi.Hal.Web.Data;
 
 namespace WebApi.Hal.Web.Api
 {
+    [Route("styles")]
     public class StylesController : Controller
     {
         readonly IBeerDbContext beerDbContext;
@@ -28,6 +29,7 @@ namespace WebApi.Hal.Web.Api
             return new BeerStyleListRepresentation(beerStyles);
         }
 
+        [Route("{id:int}")]
         public IActionResult Get(int id)
         {
             var beerStyle = beerDbContext.BeerStyles.SingleOrDefault(s => s.Id == id);

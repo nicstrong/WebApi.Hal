@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using System.Net;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Hal.Web.Api.Resources;
 using WebApi.Hal.Web.Data;
@@ -21,36 +19,41 @@ namespace WebApi.Hal.Web.Api
         }
 
         // GET beers
-        public BeerListRepresentation Get(int page = 1)
+        [HttpGet("beers")]
+        public BeerListRepresentation Get([FromQuery]string searchTerm, [FromQuery]int page = 1)
         {
-            var beers = repository.Find(new GetBeersQuery(), page, PageSize);
-
-            var resourceList = new BeerListRepresentation(beers.ToList(), beers.TotalResults, beers.TotalPages, page, LinkTemplates.Beers.GetBeers);
-
-            return resourceList;
-        }
-
-        [HttpGet]
-        public BeerListRepresentation Search(string searchTerm, int page = 1)
-        {
-            var beers = repository.Find(new GetBeersQuery(b => b.Name.Contains(searchTerm)), page, PageSize);
-
-            // snap page back to actual page found
-            if (page > beers.TotalPages) page = beers.TotalPages;
-
-            //var link = LinkTemplates.Beers.SearchBeers.CreateLink(new { searchTerm, page });
-            var beersResource = new BeerListRepresentation(beers.ToList(), beers.TotalResults, beers.TotalPages, page,
-                                                           LinkTemplates.Beers.SearchBeers,
-                                                           new { searchTerm })
+            if (string.IsNullOrEmpty(searchTerm))
             {
-                Page = page,
-                TotalResults = beers.TotalResults
-            };
+                var beers = repository.Find(new GetBeersQuery(), page, PageSize);
 
-            return beersResource;
+                var resourceList = new BeerListRepresentation(beers.ToList(), beers.TotalResults, beers.TotalPages,
+                    page, LinkTemplates.Beers.GetBeers);
+
+                return resourceList;
+            }
+            else
+            {
+                var beers = repository.Find(new GetBeersQuery(b => b.Name.Contains(searchTerm)), page, PageSize);
+
+                // snap page back to actual page found
+                if (page > beers.TotalPages) page = beers.TotalPages;
+
+                //var link = LinkTemplates.Beers.SearchBeers.CreateLink(new { searchTerm, page });
+                var beersResource = new BeerListRepresentation(beers.ToList(), beers.TotalResults, beers.TotalPages,
+                    page,
+                    LinkTemplates.Beers.SearchBeers,
+                    new {searchTerm})
+                {
+                    Page = page,
+                    TotalResults = beers.TotalResults
+                };
+
+                return beersResource;
+            }
         }
 
         // POST beers
+        [HttpPost("beers")]
         public IActionResult Post(BeerRepresentation value)
         {
             var newBeer = new Beer(value.Name);
