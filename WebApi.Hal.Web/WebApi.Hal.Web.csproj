@@ -7,6 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\Scripts\Script001.sql" />
+    <None Remove="Data\Scripts\Script002_InitialData.sql" />
+    <None Remove="Data\Scripts\Script003.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Scripts\Script001.sql" />
+    <EmbeddedResource Include="Data\Scripts\Script002_InitialData.sql" />
+    <EmbeddedResource Include="Data\Scripts\Script003.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="dbup4-core" Version="4.0.0-beta0003" />
     <PackageReference Include="dbup4-sqlite" Version="4.0.0-beta0003" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
@@ -19,6 +31,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebApi.Hal\WebApi.Hal.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="beer.db">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="App_Start\" />
   </ItemGroup>
 
 </Project>

@@ -16,7 +16,7 @@ namespace WebApi.Hal.Web.Api
 
         public BreweryListRepresentation Get()
         {
-            var breweries = beerDbContext.Styles
+            var breweries = beerDbContext.BeerStyles
                 .ToList()
                 .Select(s => new BreweryRepresentation
                 {

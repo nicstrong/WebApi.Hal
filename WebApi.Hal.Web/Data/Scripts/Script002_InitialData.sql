@@ -5,8 +5,7 @@ VALUES
 	('Nøgne Ø', 'Grimstad', 'Norway', 'http://www.nogne-o.com/'),
 	('8 Wired Brewing Co.', 'Blenheim', 'New Zealand', 'http://www.8wired.co.nz/'),
 	('Sierra Nevada Brewing Co.', 'Chico', 'USA', 'http://www.sierra-nevada.com/'),
-	('Rogue Ales', 'Newport', 'United States', 'http://www.rogue.com/')
-GO
+	('Rogue Ales', 'Newport', 'United States', 'http://www.rogue.com/');
 
 INSERT INTO BeerStyles ([Name])
 VALUES
@@ -18,8 +17,7 @@ VALUES
 	('English Porter'),
 	('Tripel'),
 	('American IPA'),
-	('Maibock / Helles Bock')
-GO
+	('Maibock / Helles Bock');
 
 INSERT INTO Beers ([Name], Style_Id , Brewery_Id, Abv)
 VALUES
@@ -36,5 +34,4 @@ VALUES
 	('Sierra Nevada Pale Ale', 4, 5, 5.6),
 	('Red Fox Amber Ale', 2, 6, 5.1),
 	('Dead Guy Ale', 9, 6, 6.5),
-	('5 A.M. Saint', 2, 2, 5.0)
-GO
+	('5 A.M. Saint', 2, 2, 5.0);

@@ -16,7 +16,7 @@ namespace WebApi.Hal.Web.Api
 
         public BeerStyleListRepresentation Get()
         {
-            var beerStyles = beerDbContext.Styles
+            var beerStyles = beerDbContext.BeerStyles
                 .ToList()
                 .Select(s => new BeerStyleRepresentation
                 {
@@ -30,7 +30,7 @@ namespace WebApi.Hal.Web.Api
 
         public IActionResult Get(int id)
         {
-            var beerStyle = beerDbContext.Styles.SingleOrDefault(s => s.Id == id);
+            var beerStyle = beerDbContext.BeerStyles.SingleOrDefault(s => s.Id == id);
             if (beerStyle == null)
                 return NotFound();
 
